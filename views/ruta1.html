@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Enfermos</title>
+    <!-- Enlace al archivo CSS de Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('https://live.staticflickr.com/3648/3644828818_654104f50d_b.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        .tabla-enfermos {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        .tabla-enfermos table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .tabla-enfermos th, .tabla-enfermos td {
+            padding: 8px;
+            border: 1px solid #dddddd;
+            text-align: left;
+        }
+        .tabla-enfermos th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <a href="home.html" class="btn btn-primary">
+            <img src="https://c0.klipartz.com/pngpicture/907/970/gratis-png-logotipo-de-la-casa-blanca-iconos-de-la-computadora-casa-casa-hogar.png" alt="Casa" style="width: 20px; height: 20px; margin-right: 5px;">
+        </a>
+        <h1>Crear Nuevo Enfermo Ruta1</h1>
+        <form id="enfermoForm">
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" class="form-control" placeholder="Nombre" name="nombre">
+            </div>
+            <div class="form-group">
+                <label for="direccion">Direccion:</label>
+                <input type="text" class="form-control" placeholder="Direccion" name="direccion" >
+            </div>
+            <div class="form-group">
+                <label for="telefono">Telefono:</label>
+                <input type="text" class="form-control" placeholder="Telefono fijo" name="telefono" >
+            </div>
+            <div class="form-group">
+                <label for="ministra">Ministro:</label>
+                <input type="text" class="form-control" placeholder="Ministro encargado" name="ministra">
+            </div>
+            <div class="form-group">
+                <label for="enfermos">Sector:</label>
+                <input type="text" class="form-control" placeholder="Sector donde se encuentra" name="sector">
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary" onclick="guardarEnfermo()">Guardar Enfermo</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-info" onclick="obtenerEnfermos()">Obtener Enfermos</button>
+                    <button type="button" class="btn btn-warning" onclick="actualizarEnfermo()">Actualizar Enfermo</button>
+                    <button type="button" class="btn btn-danger" onclick="eliminarEnfermo()">Eliminar Enfermo</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Tabla para mostrar los enfermos -->
+        <div class="tabla-enfermos">
+            <h2>Listado de Enfermos</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Ministra</th>
+                        <th>Sector</th>
+                    </tr>
+                </thead>
+                <tbody id="enfermosTableBody">
+                    <!-- Aquí se insertarán las filas de enfermos -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Enlace al archivo JS de Bootstrap (opcional, pero requerido para ciertas funcionalidades) -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        async function guardarEnfermo() {
+            // Obtener los valores de los campos del formulario
+            const nombre = document.querySelector('input[name="nombre"]').value;
+            const direccion = document.querySelector('input[name="direccion"]').value;
+            const telefono = document.querySelector('input[name="telefono"]').value;
+            const ministra = document.querySelector('input[name="ministra"]').value;
+            const sector = document.querySelector('input[name="sector"]').value;
+
+            // Verificar que todos los campos estén completos
+            if (!nombre || !direccion || !telefono || !ministra || !sector) {
+                alert('Todos los campos son obligatorios');
+                return;
+            }
+
+            try {
+                // Crear un objeto con los datos del nuevo enfermo
+                const data = {
+                    nombre,
+                    direccion,
+                    telefono,
+                    ministra,
+                    sector
+                };
+
+                // Enviar la solicitud para guardar el nuevo enfermo
+                const response = await fetch('/ruta1', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+            } catch (error) {
+                console.error('Error al guardar el enfermo:', error);
+            }
+            document.getElementById('enfermoForm').reset();
+        }
+
+        async function obtenerEnfermos() {
+            const response = await fetch('/ruta1');
+            const data = await response.json();
+            mostrarEnfermos(data);
+            // Mostrar la tabla de enfermos al hacer clic en el botón
+            document.querySelector('.tabla-enfermos').style.display = 'block';
+        }
+
+        function mostrarEnfermos(enfermo) {
+            const tableBody = document.getElementById('enfermosTableBody');
+            tableBody.innerHTML = '';
+
+            enfermo.forEach(enfermo => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${enfermo.nombre}</td>
+                    <td>${enfermo.direccion}</td>
+                    <td>${enfermo.ministra}</td>
+                    <td>${enfermo.sector}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        async function actualizarEnfermo() {
+            const nombre = document.querySelector('input[name="nombre"]').value;
+            if (!nombre) {
+                alert('Por favor, ingrese el nombre del enfermo.');
+                return;
+            }
+
+            try {
+                const data = {
+                    // Obtener el nombre del enfermo y los datos actualizados del formulario
+                    nombre: nombre,
+                    updates: {
+                        direccion: document.querySelector('input[name="direccion"]').value,
+                        telefono: document.querySelector('input[name="telefono"]').value,
+                        ministra: document.querySelector('input[name="ministra"]').value,
+                        sector: document.querySelector('input[name="sector"]').value
+                    }
+                };
+
+                const response = await fetch('/ruta1', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const updatedEnfermo = await response.json();
+                alert('Enfermo actualizado correctamente.');
+
+                // Limpiar el formulario después de la actualización
+                document.getElementById('enfermoForm').reset();
+            } catch (error) {
+                console.log('Error al actualizar el enfermo:', error);
+                alert('Error al actualizar el enfermo. Consulte la consola para obtener más detalles.');
+            }
+        }
+
+        async function eliminarEnfermo() {
+            const nombre = document.querySelector('input[name="nombre"]').value;
+            if (!nombre) {
+                alert('Por favor, ingrese el nombre del enfermo.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/ruta1`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nombre })
+                });
+
+                const data = await response.json();
+                alert(data.message);
+                // Limpiar el formulario después de eliminar el enfermo
+                document.getElementById('enfermoForm').reset();
+            } catch (error) {
+                console.error('Error al eliminar el enfermo:', error);
+                alert('Error al eliminar el enfermoo.');
+            }
+        }
+
+    </script>
+</body>
+</html>

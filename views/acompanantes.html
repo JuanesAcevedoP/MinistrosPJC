@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Acompañantes</title>
+    <!-- Enlace al archivo CSS de Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('https://live.staticflickr.com/3648/3644828818_654104f50d_b.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        .tabla-acompanantes {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        .tabla-acompanantes table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .tabla-acompanantes th, .tabla-acompanantes td {
+            padding: 8px;
+            border: 1px solid #dddddd;
+            text-align: left;
+        }
+        .tabla-acompanantes th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <a href="home.html" class="btn btn-primary">
+            <img src="https://c0.klipartz.com/pngpicture/907/970/gratis-png-logotipo-de-la-casa-blanca-iconos-de-la-computadora-casa-casa-hogar.png" alt="Casa" style="width: 20px; height: 20px; margin-right: 5px;">
+        </a>
+        <h1>Crear Nuevo Acompañante</h1>
+        <form id="acompananteForm">
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" class="form-control" placeholder="Nombre" name="nombre">
+            </div>
+            
+            <div class="form-group">
+                <label for="telefono">Telefono:</label>
+                <input type="text" class="form-control" placeholder="Telefono fijo" name="telefono" >
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary" onclick="guardarAcompanantes()">Guardar Acompañante</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-info" onclick="obtenerAcompanantes()">Obtener Acompañante</button>
+                    <button type="button" class="btn btn-warning" onclick="actualizarAcompanantes()">Actualizar Acompañante</button>
+                    <button type="button" class="btn btn-danger" onclick="eliminarAcompanantes()">Eliminar Acompañante</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Tabla para mostrar los acompañantes -->
+        <div class="tabla-acompanantes">
+            <h2>Listado de Acompañantes</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Teléfono</th>
+                    </tr>
+                </thead>
+                <tbody id="acompanantesTableBody">
+                    <!-- Aquí se insertarán las filas de acompañantes -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Enlace al archivo JS de Bootstrap (opcional, pero requerido para ciertas funcionalidades) -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        async function guardarAcompanantes() {
+            // Obtener los valores de los campos del formulario
+            const nombre = document.querySelector('input[name="nombre"]').value;
+            const telefono = document.querySelector('input[name="telefono"]').value;
+
+            // Verificar que todos los campos estén completos
+            if (!nombre  || !telefono ) {
+                alert('Todos los campos son obligatorios');
+                return;
+            }
+
+            try {
+                // Crear un objeto con los datos del nuevo ministro
+                const data = {
+                    nombre,
+                    telefono
+                };
+
+                // Enviar la solicitud para guardar el nuevo ministro
+                const response = await fetch('/acompanantes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+            } catch (error) {
+                console.error('Error al guardar el acompañante:', error);
+            }
+            document.getElementById('acompananteForm').reset();
+        }
+
+        async function obtenerAcompanantes() {
+            const response = await fetch('/acompanantes');
+            const data = await response.json();
+            mostrarAcompanantes(data);
+            // Mostrar la tabla de acompañantes al hacer clic en el botón
+            document.querySelector('.tabla-acompanantes').style.display = 'block';
+        }
+
+        function mostrarAcompanantes(acompanantes) {
+            const tableBody = document.getElementById('acompanantesTableBody');
+            tableBody.innerHTML = '';
+
+            acompanantes.forEach(acompanantes => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${acompanantes.nombre}</td>
+                    <td>${acompanantes.telefono}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        async function actualizarAcompanantes() {
+            const nombre = document.querySelector('input[name="nombre"]').value;
+            if (!nombre) {
+                alert('Por favor, ingrese el nombre del acompañante.');
+                return;
+            }
+
+            try {
+                const data = {
+                    // Obtener el nombre del ministro y los datos actualizados del formulario
+                    nombre: nombre,
+                    updates: {
+                        telefono: document.querySelector('input[name="telefono"]').value,
+                    }
+                };
+
+                const response = await fetch('/acompanantes', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const updatedAcompanante = await response.json();
+                alert('Acompañado actualizado correctamente.');
+
+                // Limpiar el formulario después de la actualización
+                document.getElementById('acompananteForm').reset();
+            } catch (error) {
+                console.log('Error al actualizar el acompañantes:', error);
+                alert('Error al actualizar el acompañante. Consulte la consola para obtener más detalles.');
+            }
+        }
+
+        async function eliminarAcompanantes() {
+            const nombre = document.querySelector('input[name="nombre"]').value;
+            if (!nombre) {
+                alert('Por favor, ingrese el nombre del acompañante.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/acompanantes`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nombre })
+                });
+
+                const data = await response.json();
+                alert(data.message);
+                // Limpiar el formulario después de eliminar el acompañante
+                document.getElementById('acompananteForm').reset();
+            } catch (error) {
+                console.error('Error al eliminar el acompañanate:', error);
+                alert('Error al eliminar el acompañante.');
+            }
+        }
+
+    </script>
+</body>
+</html>

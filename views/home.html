@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Inicial</title>
+    <!-- Enlace al archivo CSS de Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('https://live.staticflickr.com/3648/3644828818_654104f50d_b.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .container {
+            text-align: center; /* Centra el contenido del contenedor */
+            color: white; /* Cambia el color del texto a blanco */
+        }
+
+        .list-group-item {
+            background-color: transparent; /* Elimina el fondo blanco de los botones */
+            border: none; /* Elimina el borde de los botones */
+            margin-bottom: 10px; /* Añade espacio entre los botones */
+        }
+
+        /* Agregar borde y sombra al título */
+        h1 {
+            text-shadow: 2px 2px  rgba(0, 0, 0, 0.5); /* Agrega una sombra al texto */
+        }
+
+        /* Agregar borde y sombra al párrafo */
+        p {
+            text-shadow: 2px 2px  rgba(0, 0, 0, 0.5); /* Agrega una sombra al texto */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Bienvenido al Sistema de Ministros PJC</h1>
+        <p class="mb-3">Por favor, selecciona una de las siguientes opciones:</p>
+        <ul class="list-group">
+            <li class="list-group-item"><a href="ministros.html" class="btn btn-primary btn-lg btn-block">Ministros</a></li>
+            <li class="list-group-item"><a href="acompanantes.html" class="btn btn-success btn-lg btn-block">Acompañantes</a></li>
+            <li class="list-group-item"><a href="ruta1.html" class="btn btn-secondary btn-lg btn-block">Ruta 1</a></li>
+            <li class="list-group-item"><a href="ruta2.html" class="btn btn-danger btn-lg btn-block">Ruta 2</a></li>
+            <li class="list-group-item"><a href="ruta3.html" class="btn btn-warning btn-lg btn-block">Ruta 3</a></li>
+            <li class="list-group-item"><a href="ruta4.html" class="btn btn-info btn-lg btn-block">Ruta 4</a></li>
+            <li class="list-group-item"><a href="ruta5.html" class="btn btn-dark btn-lg btn-block">Ruta 5</a></li>
+        </ul>
+    </div>
+    <!-- Enlace al archivo JS de Bootstrap (opcional, pero requerido para ciertas funcionalidades) -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

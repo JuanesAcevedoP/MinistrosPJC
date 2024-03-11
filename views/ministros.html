@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Ministro</title>
+    <!-- Enlace al archivo CSS de Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('https://live.staticflickr.com/3648/3644828818_654104f50d_b.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        .tabla-ministros {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        .tabla-ministros table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .tabla-ministros th, .tabla-ministros td {
+            padding: 8px;
+            border: 1px solid #dddddd;
+            text-align: left;
+        }
+        .tabla-ministros th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <a href="home.html" class="btn btn-primary">
+            <img src="https://c0.klipartz.com/pngpicture/907/970/gratis-png-logotipo-de-la-casa-blanca-iconos-de-la-computadora-casa-casa-hogar.png" alt="Casa" style="width: 20px; height: 20px; margin-right: 5px;">
+        </a>
+        <h1>Crear Nuevo Ministro</h1>
+        <form id="ministroForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" class="form-control" placeholder="Nombre" name="nombre">
+                    </div>
+                    <div class="form-group">
+                        <label for="cedula">Cedula:</label>
+                        <input type="text" class="form-control" placeholder="Cedula" name="cedula">
+                    </div>
+                    <div class="form-group">
+                        <label for="edad">Edad:</label>
+                        <input type="text" class="form-control" placeholder="Edad" name="edad">
+                    </div>
+                    <div class="form-group">
+                        <label for="direccion">Direccion:</label>
+                        <input type="text" class="form-control" placeholder="Direccion" name="direccion" >
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Telefono:</label>
+                        <input type="text" class="form-control" placeholder="Telefono fijo" name="telefono" >
+                    </div>
+                    <div class="form-group">
+                        <label for="celular">Celular:</label>
+                        <input type="text" class="form-control" placeholder="Celular" name="celular" >
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="oficio">Oficio:</label>
+                        <input type="text" class="form-control" placeholder="Oficio" name="oficio">
+                    </div>
+                    <div class="form-group">
+                        <label for="estudio">Estudio:</label>
+                        <input type="text" class="form-control" placeholder="Estudio" name="estudio">
+                    </div>
+                    <div class="form-group">
+                        <label for="correo">Barrio:</label>
+                        <input type="text" class="form-control" placeholder="Barrio" name="barrio">
+                    </div>
+                    <div class="form-group">
+                        <label for="correo">Correo:</label>
+                        <input type="text" class="form-control" placeholder="Correo" name="correo" >
+                    </div>
+                    <div class="form-group">
+                        <label for="enfermos">Enfermos:</label>
+                        <input type="text" class="form-control" placeholder="Enfermos" name="enfermos">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary" onclick="guardarMinistro()">Guardar Ministro</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-info" onclick="obtenerMinistros()">Obtener Ministros</button>
+                    <button type="button" class="btn btn-warning" onclick="actualizarMinistro()">Actualizar Ministro</button>
+                    <button type="button" class="btn btn-danger" onclick="eliminarMinistro()">Eliminar Ministro</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Tabla para mostrar los ministros -->
+        <div class="tabla-ministros">
+            <h2>Listado de Ministros</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Edad</th>
+                        <th>Cédula</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Celular</th>
+                        <th>Oficio</th>
+                        <th>Estudio</th>
+                        <th>Barrio</th>
+                        <th>Correo</th>
+                        <th>Enfermos</th>
+                    </tr>
+                </thead>
+                <tbody id="ministrosTableBody">
+                    <!-- Aquí se insertarán las filas de ministros -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Enlace al archivo JS de Bootstrap (opcional, pero requerido para ciertas funcionalidades) -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        async function guardarMinistro() {
+            // Obtener los valores de los campos del formulario
+            const nombre = document.querySelector('input[name="nombre"]').value;
+            const edad = document.querySelector('input[name="edad"]').value;
+            const cedula = document.querySelector('input[name="cedula"]').value;
+            const direccion = document.querySelector('input[name="direccion"]').value;
+            const telefono = document.querySelector('input[name="telefono"]').value;
+            const celular = document.querySelector('input[name="celular"]').value;
+            const oficio = document.querySelector('input[name="oficio"]').value;
+            const estudio = document.querySelector('input[name="estudio"]').value;
+            const barrio = document.querySelector('input[name="barrio"]').value;
+            const correo = document.querySelector('input[name="correo"]').value;
+            const enfermos = document.querySelector('input[name="enfermos"]').value;
+
+            // Verificar que todos los campos estén completos
+            if (!nombre || !edad || !cedula || !direccion || !telefono || !celular || !oficio || !estudio || !barrio || !correo || !enfermos) {
+                alert('Todos los campos son obligatorios');
+                return;
+            }
+
+            try {
+                // Crear un objeto con los datos del nuevo ministro
+                const data = {
+                    nombre,
+                    edad,
+                    cedula,
+                    direccion,
+                    telefono,
+                    celular,
+                    oficio,
+                    estudio,
+                    barrio,
+                    correo,
+                    enfermos
+                };
+
+                // Enviar la solicitud para guardar el nuevo ministro
+                const response = await fetch('/ministros', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+            } catch (error) {
+                console.error('Error al guardar el ministro:', error);
+            }
+            document.getElementById('ministroForm').reset();
+        }
+
+        async function obtenerMinistros() {
+            const response = await fetch('/ministros');
+            const data = await response.json();
+            mostrarMinistros(data);
+            // Mostrar la tabla de ministros al hacer clic en el botón
+            document.querySelector('.tabla-ministros').style.display = 'block';
+        }
+
+        function mostrarMinistros(ministros) {
+            const tableBody = document.getElementById('ministrosTableBody');
+            tableBody.innerHTML = '';
+
+            ministros.forEach(ministro => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${ministro.nombre}</td>
+                    <td>${ministro.edad}</td>
+                    <td>${ministro.cedula}</td>
+                    <td>${ministro.direccion}</td>
+                    <td>${ministro.telefono}</td>
+                    <td>${ministro.celular}</td>
+                    <td>${ministro.oficio}</td>
+                    <td>${ministro.estudio}</td>
+                    <td>${ministro.barrio}</td>
+                    <td>${ministro.correo}</td>
+                    <td>${ministro.enfermos}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        async function actualizarMinistro() {
+            const nombre = document.querySelector('input[name="nombre"]').value;
+            if (!nombre) {
+                alert('Por favor, ingrese el nombre del ministro.');
+                return;
+            }
+
+            try {
+                const data = {
+                    // Obtener el nombre del ministro y los datos actualizados del formulario
+                    nombre: nombre,
+                    updates: {
+                        edad: document.querySelector('input[name="edad"]').value,
+                        cedula: document.querySelector('input[name="cedula"]').value,
+                        direccion: document.querySelector('input[name="direccion"]').value,
+                        telefono: document.querySelector('input[name="telefono"]').value,
+                        celular: document.querySelector('input[name="celular"]').value,
+                        oficio: document.querySelector('input[name="oficio"]').value,
+                        estudio: document.querySelector('input[name="estudio"]').value,
+                        barrio: document.querySelector('input[name="barrio"]').value,
+                        correo: document.querySelector('input[name="correo"]').value,
+                        enfermos: document.querySelector('input[name="enfermos"]').value
+                    }
+                };
+
+                const response = await fetch('/ministros', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const updatedMinistro = await response.json();
+                alert('Ministro actualizado correctamente.');
+
+                // Limpiar el formulario después de la actualización
+                document.getElementById('ministroForm').reset();
+            } catch (error) {
+                console.log('Error al actualizar el ministro:', error);
+                alert('Error al actualizar el ministro. Consulte la consola para obtener más detalles.');
+            }
+        }
+
+        async function eliminarMinistro() {
+            const nombre = document.querySelector('input[name="nombre"]').value;
+            if (!nombre) {
+                alert('Por favor, ingrese el nombre del ministro.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/ministros`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nombre })
+                });
+
+                const data = await response.json();
+                alert(data.message);
+                // Limpiar el formulario después de eliminar el ministro
+                document.getElementById('ministroForm').reset();
+            } catch (error) {
+                console.error('Error al eliminar el ministro:', error);
+                alert('Error al eliminar el ministro.');
+            }
+        }
+
+    </script>
+</body>
+</html>
