@@ -1,15 +1,26 @@
 {
-    
-    "version":2,
-    "builds":[{
-        "src":"./index.js",
-        "use":"@vercel/node"
-    }],
-    "routes":[
-        {
-            "src":"/(.*)",
-            "dest":"/"
-        }
+    "version": 2,
+    "builds": [
+      {
+        "src": "./index.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/(.*)",
+        "destination": "/"
+      }
+    ],
+    "headers": [
+      {
+        "source": "/(.*)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31556952, immutable"
+          }
+        ]
+      }
     ]
-
-}
+  }
