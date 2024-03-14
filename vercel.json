@@ -6,21 +6,38 @@
         "use": "@vercel/node"
       }
     ],
-    "rewrites": [
+    "routes": [
       {
-        "source": "/(.*)",
-        "destination": "/"
-      }
-    ],
-    "headers": [
+        "src": "/",
+        "dest": "/"
+      },
       {
-        "source": "/(.*)",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "public, max-age=31556952, immutable"
-          }
-        ]
+        "src": "/ministros",
+        "dest": "/ministros"
+      },
+      {
+        "src": "/acompanantes",
+        "dest": "/acompanantes"
+      },
+      {
+        "src": "/ruta1",
+        "dest": "/ruta1"
+      },
+      {
+        "src": "/ruta2",
+        "dest": "/ruta2"
+      },
+      {
+        "src": "/ruta3",
+        "dest": "/ruta3"
+      },
+      {
+        "src": "/ruta4",
+        "dest": "/ruta4"
+      },
+      {
+        "src": "/ruta5",
+        "dest": "/ruta5"
       }
     ]
   }
